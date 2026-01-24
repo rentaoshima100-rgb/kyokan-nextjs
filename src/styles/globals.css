@@ -1,0 +1,166 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Japanese Web Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&display=swap");
+
+@layer base {
+  :root {
+    --section-padding: clamp(4rem, 8vw, 6rem);
+    --container-padding: clamp(1rem, 4vw, 2rem);
+    --transition-base: 250ms ease-out;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-white text-slate-700 font-sans text-base leading-relaxed;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-sans font-semibold text-primary-900;
+  }
+
+  ::selection {
+    @apply bg-accent-500/15 text-primary-900;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-accent-500 ring-offset-2;
+  }
+}
+
+@layer components {
+  /* Container */
+  .container-custom {
+    @apply mx-auto w-full max-w-6xl px-5 sm:px-6 lg:px-8;
+  }
+
+  .container-narrow {
+    @apply mx-auto w-full max-w-3xl px-5 sm:px-6 lg:px-8;
+  }
+
+  /* Section spacing */
+  .section {
+    @apply py-16 md:py-20 lg:py-24;
+  }
+
+  .section-sm {
+    @apply py-10 md:py-12 lg:py-16;
+  }
+
+  /* Button base styles */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2
+           px-5 py-2.5 rounded-md
+           font-medium text-sm
+           transition-all duration-200
+           focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2;
+  }
+
+  .btn-primary {
+    @apply btn bg-accent-600 text-white
+           hover:bg-accent-700
+           focus-visible:ring-accent-500;
+  }
+
+  .btn-secondary {
+    @apply btn bg-primary-900 text-white
+           hover:bg-primary-800
+           focus-visible:ring-primary-900;
+  }
+
+  .btn-outline {
+    @apply btn bg-transparent text-primary-900 border border-primary-300
+           hover:bg-primary-50 hover:border-primary-400
+           focus-visible:ring-primary-500;
+  }
+
+  .btn-white {
+    @apply btn bg-white text-primary-900
+           hover:bg-slate-50
+           focus-visible:ring-white;
+  }
+
+  .btn-lg {
+    @apply px-6 py-3 text-base;
+  }
+
+  /* Card styles */
+  .card {
+    @apply bg-white rounded-lg p-6
+           border border-slate-200
+           transition-all duration-200;
+  }
+
+  .card-hover {
+    @apply card hover:border-slate-300 hover:shadow-card;
+  }
+
+  /* Section label */
+  .section-label {
+    @apply inline-block text-xs font-semibold tracking-widest uppercase
+           text-accent-600 mb-2;
+  }
+
+  /* Info table */
+  .info-table {
+    @apply divide-y divide-slate-200;
+  }
+
+  .info-table-row {
+    @apply flex flex-col sm:flex-row py-4 gap-2 sm:gap-6;
+  }
+
+  .info-table-label {
+    @apply text-slate-500 text-sm font-medium sm:w-36 flex-shrink-0;
+  }
+
+  .info-table-value {
+    @apply text-slate-800 text-sm;
+  }
+
+  /* Feature card */
+  .feature-card {
+    @apply relative bg-white border border-slate-200 rounded-lg p-6
+           hover:border-accent-300 hover:shadow-card
+           transition-all duration-200;
+  }
+
+  .feature-card-number {
+    @apply absolute -top-3 -left-3 w-8 h-8
+           bg-accent-600 rounded-md
+           flex items-center justify-center
+           text-white font-semibold text-sm;
+  }
+}
+
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
