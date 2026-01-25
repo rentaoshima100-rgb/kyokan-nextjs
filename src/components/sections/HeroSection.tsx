@@ -27,8 +27,8 @@ export function HeroSection() {
       ref={containerRef}
       className="relative min-h-[90vh] flex items-center bg-primary-950"
     >
-      {/* Simple gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-primary-900 to-primary-950" />
+      {/* Solid corporate background */}
+      <div className="absolute inset-0 bg-primary-950" />
       
       {/* Subtle grid pattern */}
       <div

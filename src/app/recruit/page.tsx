@@ -43,7 +43,7 @@ export default function RecruitPage() {
     <div>
       {/* Hero */}
       <section className="relative pt-32 pb-16 md:pt-40 md:pb-20 bg-primary-950">
-        <div className="absolute inset-0 bg-gradient-to-b from-primary-900 to-primary-950" />
+        <div className="absolute inset-0 bg-primary-950" />
         <div className="container-custom relative z-10">
           <nav className="flex items-center gap-2 text-sm text-slate-400 mb-6">
             <Link href="/" className="hover:text-white transition-colors">ホーム</Link>

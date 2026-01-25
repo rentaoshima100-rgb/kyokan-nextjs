@@ -29,7 +29,7 @@ export default function CompanyPage() {
     <div>
       {/* Hero */}
       <section className="relative pt-32 pb-16 md:pt-40 md:pb-20 bg-primary-950">
-        <div className="absolute inset-0 bg-gradient-to-b from-primary-900 to-primary-950" />
+        <div className="absolute inset-0 bg-primary-950" />
         <div className="container-custom relative z-10">
           <nav className="flex items-center gap-2 text-sm text-slate-400 mb-6">
             <Link href="/" className="hover:text-white transition-colors">ホーム</Link>
@@ -130,6 +130,53 @@ export default function CompanyPage() {
         </div>
       </section>
 
+      {/* Award Highlight */}
+      <section className="section-sm bg-primary-950">
+        <div className="container-custom">
+          <motion.div
+            variants={fadeUpVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="bg-white/5 border border-white/10 rounded-lg p-8 md:p-10"
+          >
+            <div className="grid md:grid-cols-2 gap-8 items-center">
+              <div>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 rounded-full bg-gold-500/20 flex items-center justify-center">
+                    <svg className="w-6 h-6 text-gold-400" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gold-400 font-semibold">第4回インフラメンテナンス大賞</p>
+                    <p className="text-xs text-slate-400">2020年受賞</p>
+                  </div>
+                </div>
+                <h3 className="text-xl font-semibold text-white mb-3">
+                  防衛大臣賞・技術開発部門 優秀賞
+                </h3>
+                <p className="text-sm text-slate-300 leading-relaxed">
+                  独自開発の「ラクユーZ工法」が高く評価され、技術開発部門において優秀賞を受賞しました。
+                  下水道関連工事における革新的な水替え工法として、全国で広く採用されています。
+                </p>
+              </div>
+              <div className="flex justify-center md:justify-end">
+                <div className="bg-white/10 rounded-lg p-6 text-center">
+                  <div className="w-20 h-20 mx-auto mb-3 bg-gold-500/20 rounded-full flex items-center justify-center">
+                    <svg className="w-10 h-10 text-gold-400" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                    </svg>
+                  </div>
+                  <p className="text-white text-sm font-semibold">優秀賞</p>
+                  <p className="text-slate-400 text-xs mt-1">製品・技術開発部門</p>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
       {/* History */}
       <section className="section bg-slate-50">
         <div className="container-custom">
@@ -139,6 +186,34 @@ export default function CompanyPage() {
             description="1994年の創業から現在まで"
           />
 
+          {/* Horizontal Timeline Overview */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mb-12 overflow-x-auto scrollbar-hide"
+          >
+            <div className="flex items-center justify-center gap-2 min-w-max px-4">
+              {timeline.map((item, index) => (
+                <div key={item.year} className="flex items-center">
+                  <div className="flex flex-col items-center">
+                    <div className="w-3 h-3 bg-accent-500 rounded-full" />
+                    <div className="text-xs font-semibold text-accent-600 mt-1 whitespace-nowrap">
+                      {item.year}
+                    </div>
+                    <div className="text-[10px] text-slate-500 mt-0.5 whitespace-nowrap max-w-[80px] truncate text-center">
+                      {item.title}
+                    </div>
+                  </div>
+                  {index < timeline.length - 1 && (
+                    <div className="w-12 h-0.5 bg-accent-200 mx-1" />
+                  )}
+                </div>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Vertical Timeline Detail */}
           <motion.div
             variants={staggerContainerVariants}
             initial="hidden"

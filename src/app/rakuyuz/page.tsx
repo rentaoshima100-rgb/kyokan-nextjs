@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Button, SectionHeader, Badge } from "@/components/ui/Button";
 import { ModelViewer } from "@/components/ui/ModelViewer";
+import { ProcessFlowSection } from "@/components/sections/ProcessFlowSection";
 import { fadeUpVariants, staggerContainerVariants, staggerItemVariants } from "@/lib/animations";
 
 const features = [
@@ -77,7 +78,7 @@ export default function RakuyuzPage() {
     <div>
       {/* Hero */}
       <section className="relative pt-32 pb-16 md:pt-40 md:pb-20 bg-primary-950">
-        <div className="absolute inset-0 bg-gradient-to-b from-primary-900 to-primary-950" />
+        <div className="absolute inset-0 bg-primary-950" />
         <div
           className="absolute inset-0 opacity-[0.03]"
           style={{
@@ -170,7 +171,7 @@ export default function RakuyuzPage() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="aspect-video bg-gradient-to-br from-gray-200 to-gray-300 rounded-xl overflow-hidden relative shadow-2xl border border-slate-300"
+              className="aspect-video bg-slate-200 rounded-xl overflow-hidden relative shadow-elevated border border-slate-300"
             >
               <ModelViewer 
                 modelPath="/models/pump-orange.glb"
@@ -221,7 +222,7 @@ export default function RakuyuzPage() {
       </section>
 
       {/* 3D Model Viewer Section */}
-      <section className="section bg-gradient-to-b from-slate-100 to-slate-200">
+      <section className="section bg-slate-100">
         <div className="container-custom">
           <SectionHeader
             label="Pump Systems"
@@ -267,7 +268,7 @@ export default function RakuyuzPage() {
 
             {/* 3D Model Viewer */}
             <div className="lg:col-span-3">
-              <div className="aspect-square lg:aspect-[4/3] bg-gradient-to-br from-gray-200 to-gray-300 border border-slate-300 rounded-xl overflow-hidden relative shadow-2xl">
+              <div className="aspect-square lg:aspect-[4/3] bg-slate-200 border border-slate-300 rounded-xl overflow-hidden relative shadow-elevated">
                 {/* Three.js Canvas - Real 3D Model */}
                 <ModelViewer 
                   key={activeModel}
@@ -299,23 +300,7 @@ export default function RakuyuzPage() {
       </section>
 
       {/* Process Flow */}
-      <section className="section">
-        <div className="container-custom">
-          <SectionHeader
-            label="Process"
-            title="施工フロー"
-            description="ラクユーZ工法による施工の流れ"
-          />
-          <div className="aspect-[21/9] bg-slate-100 rounded-lg flex items-center justify-center">
-            <div className="text-center text-slate-400">
-              <svg className="w-12 h-12 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
-              </svg>
-              <p className="text-sm">施工フロー図が入ります</p>
-            </div>
-          </div>
-        </div>
-      </section>
+      <ProcessFlowSection />
 
       {/* Applications */}
       <section className="section bg-slate-50">

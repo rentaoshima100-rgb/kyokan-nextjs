@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button, SectionHeader, Badge } from "@/components/ui/Button";
@@ -14,13 +14,23 @@ const categories = [
   { id: "equipment", label: "機械器具設置" },
 ];
 
+const regions = [
+  { id: "all", label: "全地域" },
+  { id: "kyoto", label: "京都" },
+  { id: "osaka", label: "大阪" },
+  { id: "shizuoka", label: "静岡" },
+  { id: "other", label: "その他" },
+];
+
 const projects = [
   {
     id: 1,
     title: "老朽下水管耐震化工事",
     location: "京都市",
+    region: "kyoto",
     year: "2023",
     category: "rehabilitation",
+    diameter: "150mm",
     description: "ラクユーZ工法を採用し、1スパンのみの水替えで施工完了。従来工法と比較して工期を40%短縮。",
     featured: false,
   },
@@ -28,8 +38,10 @@ const projects = [
     id: 2,
     title: "管渠移設工事",
     location: "静岡県",
+    region: "shizuoka",
     year: "2022",
     category: "rehabilitation",
+    diameter: "200mm",
     description: "交通規制なしで施工完了。周辺住民への影響を最小限に抑えた環境配慮型の工事を実施。",
     featured: false,
   },
@@ -37,8 +49,10 @@ const projects = [
     id: 3,
     title: "下水道更新工事",
     location: "自衛隊施設",
+    region: "other",
     year: "2020",
     category: "rehabilitation",
+    diameter: "100mm",
     description: "インフラメンテナンス大賞優秀賞受賞案件。高いセキュリティ要件の中、安全かつ確実に施工を完了。",
     featured: true,
   },
@@ -46,8 +60,10 @@ const projects = [
     id: 4,
     title: "大規模マンション給排水管更新",
     location: "大阪市",
+    region: "osaka",
     year: "2023",
     category: "maintenance",
+    diameter: "50mm",
     description: "築30年マンションの給排水管を全面更新。入居者の生活に配慮したスケジュールで施工。",
     featured: false,
   },
@@ -55,8 +71,10 @@ const projects = [
     id: 5,
     title: "商業施設 空調設備新設工事",
     location: "京都市",
+    region: "kyoto",
     year: "2022",
     category: "hvac",
+    diameter: "-",
     description: "大型商業施設の空調設備を新設。省エネ性能の高いシステムを導入し、ランニングコストを削減。",
     featured: false,
   },
@@ -64,9 +82,44 @@ const projects = [
     id: 6,
     title: "公共施設 非常用発電機更新",
     location: "京都府",
+    region: "kyoto",
     year: "2021",
     category: "equipment",
+    diameter: "-",
     description: "老朽化した非常用発電機を最新機種に更新。災害時の電源確保体制を強化。",
+    featured: false,
+  },
+  {
+    id: 7,
+    title: "病院 給水管更生工事",
+    location: "大阪市",
+    region: "osaka",
+    year: "2022",
+    category: "rehabilitation",
+    diameter: "100mm",
+    description: "病院施設の断水時間を最小限に抑えた給水管更生工事。夜間作業で患者様への影響を軽減。",
+    featured: false,
+  },
+  {
+    id: 8,
+    title: "京都大学構内配水管工事",
+    location: "京都市",
+    region: "kyoto",
+    year: "2021",
+    category: "rehabilitation",
+    diameter: "150mm",
+    description: "大学構内の老朽化した配水管を更生。学業への影響を最小化するスケジュールで施工。",
+    featured: false,
+  },
+  {
+    id: 9,
+    title: "チサンマンション江坂豊津工事",
+    location: "大阪府",
+    region: "osaka",
+    year: "2020",
+    category: "maintenance",
+    diameter: "75mm",
+    description: "マンション共用部の給排水管を全面更新。居住者の生活を維持しながらの施工を実現。",
     featured: false,
   },
 ];
@@ -79,18 +132,36 @@ const clients = [
   "三菱地所コミュニティ",
 ];
 
+// Map marker data
+const mapMarkers = [
+  { region: "kyoto", label: "京都", count: 4, x: "48%", y: "52%" },
+  { region: "osaka", label: "大阪", count: 3, x: "45%", y: "58%" },
+  { region: "shizuoka", label: "静岡", count: 1, x: "62%", y: "50%" },
+  { region: "other", label: "その他", count: 1, x: "50%", y: "35%" },
+];
+
 export default function WorksPage() {
   const [activeCategory, setActiveCategory] = useState("all");
+  const [activeRegion, setActiveRegion] = useState("all");
 
-  const filteredProjects = activeCategory === "all"
-    ? projects
-    : projects.filter((p) => p.category === activeCategory);
+  const filteredProjects = useMemo(() => {
+    return projects.filter((p) => {
+      const categoryMatch = activeCategory === "all" || p.category === activeCategory;
+      const regionMatch = activeRegion === "all" || p.region === activeRegion;
+      return categoryMatch && regionMatch;
+    });
+  }, [activeCategory, activeRegion]);
+
+  const handleReset = () => {
+    setActiveCategory("all");
+    setActiveRegion("all");
+  };
 
   return (
     <div>
       {/* Hero */}
       <section className="relative pt-32 pb-16 md:pt-40 md:pb-20 bg-primary-950">
-        <div className="absolute inset-0 bg-gradient-to-b from-primary-900 to-primary-950" />
+        <div className="absolute inset-0 bg-primary-950" />
         <div className="container-custom relative z-10">
           <nav className="flex items-center gap-2 text-sm text-slate-400 mb-6">
             <Link href="/" className="hover:text-white transition-colors">ホーム</Link>
@@ -108,25 +179,143 @@ export default function WorksPage() {
         </div>
       </section>
 
+      {/* Project Map */}
+      <section className="section-sm bg-slate-50 border-b border-slate-200">
+        <div className="container-custom">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="grid lg:grid-cols-2 gap-8 items-center"
+          >
+            {/* Map placeholder */}
+            <div className="relative aspect-[4/3] bg-white border border-slate-200 rounded-lg overflow-hidden">
+              <div className="absolute inset-0 flex items-center justify-center">
+                {/* Simplified Japan map outline */}
+                <svg viewBox="0 0 200 180" className="w-full h-full p-8 text-slate-200">
+                  <path
+                    fill="currentColor"
+                    d="M80,20 Q100,15 120,25 L130,40 Q140,55 135,75 L140,95 Q145,110 140,125 L130,145 Q115,160 95,155 L75,150 Q60,145 55,130 L50,110 Q45,90 55,70 L60,50 Q65,30 80,20 Z"
+                  />
+                </svg>
+              </div>
+              {/* Map markers */}
+              {mapMarkers.map((marker) => (
+                <button
+                  key={marker.region}
+                  onClick={() => setActiveRegion(activeRegion === marker.region ? "all" : marker.region)}
+                  className={`absolute transform -translate-x-1/2 -translate-y-1/2 transition-all ${
+                    activeRegion === marker.region ? "scale-125 z-10" : "hover:scale-110"
+                  }`}
+                  style={{ left: marker.x, top: marker.y }}
+                >
+                  <div
+                    className={`flex items-center justify-center w-8 h-8 rounded-full text-xs font-semibold shadow-sm ${
+                      activeRegion === marker.region
+                        ? "bg-accent-600 text-white"
+                        : "bg-white text-primary-900 border border-slate-300"
+                    }`}
+                  >
+                    {marker.count}
+                  </div>
+                  <span className={`absolute -bottom-5 left-1/2 -translate-x-1/2 text-xs whitespace-nowrap ${
+                    activeRegion === marker.region ? "text-accent-600 font-medium" : "text-slate-500"
+                  }`}>
+                    {marker.label}
+                  </span>
+                </button>
+              ))}
+              {/* Legend */}
+              <div className="absolute bottom-3 left-3 text-xs text-slate-500">
+                マーカーをクリックで地域フィルター
+              </div>
+            </div>
+
+            {/* Stats */}
+            <div>
+              <h3 className="text-lg font-semibold text-primary-900 mb-4">施工実績分布</h3>
+              <div className="space-y-3">
+                {mapMarkers.map((marker) => (
+                  <div key={marker.region} className="flex items-center justify-between">
+                    <span className="text-sm text-slate-600">{marker.label}</span>
+                    <div className="flex items-center gap-2">
+                      <div className="w-32 h-2 bg-slate-200 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-accent-500 rounded-full"
+                          style={{ width: `${(marker.count / projects.length) * 100}%` }}
+                        />
+                      </div>
+                      <span className="text-sm font-medium text-primary-900 w-8 text-right">
+                        {marker.count}件
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <p className="text-sm text-slate-500 mt-4">
+                全国各地で施工実績があります。
+              </p>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
       {/* Projects */}
       <section className="section">
         <div className="container-custom">
-          {/* Filter */}
-          <div className="flex flex-wrap gap-2 mb-10 justify-center">
-            {categories.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => setActiveCategory(cat.id)}
-                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                  activeCategory === cat.id
-                    ? "bg-accent-600 text-white"
-                    : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-                }`}
-              >
-                {cat.label}
-              </button>
-            ))}
-          </div>
+          {/* Filter Bar */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="bg-white border border-slate-200 rounded-lg p-4 mb-8"
+          >
+            <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
+              <div className="flex flex-wrap gap-4">
+                {/* Category Filter */}
+                <div className="flex items-center gap-2">
+                  <label className="text-sm text-slate-500 flex-shrink-0">工事種別:</label>
+                  <select
+                    value={activeCategory}
+                    onChange={(e) => setActiveCategory(e.target.value)}
+                    className="px-3 py-1.5 border border-slate-300 rounded-md text-sm focus:ring-2 focus:ring-accent-500 focus:border-accent-500"
+                  >
+                    {categories.map((cat) => (
+                      <option key={cat.id} value={cat.id}>{cat.label}</option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Region Filter */}
+                <div className="flex items-center gap-2">
+                  <label className="text-sm text-slate-500 flex-shrink-0">地域:</label>
+                  <select
+                    value={activeRegion}
+                    onChange={(e) => setActiveRegion(e.target.value)}
+                    className="px-3 py-1.5 border border-slate-300 rounded-md text-sm focus:ring-2 focus:ring-accent-500 focus:border-accent-500"
+                  >
+                    {regions.map((region) => (
+                      <option key={region.id} value={region.id}>{region.label}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <span className="text-sm text-slate-500">
+                  {filteredProjects.length}件表示
+                </span>
+                {(activeCategory !== "all" || activeRegion !== "all") && (
+                  <button
+                    onClick={handleReset}
+                    className="text-sm text-accent-600 hover:text-accent-700 font-medium"
+                  >
+                    リセット
+                  </button>
+                )}
+              </div>
+            </div>
+          </motion.div>
 
           {/* Project Grid */}
           <motion.div

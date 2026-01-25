@@ -8,22 +8,24 @@ import { fadeUpVariants } from "@/lib/animations";
 import { companyInfo } from "@/lib/utils";
 
 const inquiryTypes = [
-  "下水道更生工事について",
-  "ラクユーZ工法について",
-  "建物設備メンテナンスについて",
-  "空調衛生設備工事について",
-  "採用について",
-  "その他",
+  { id: "method", label: "工法について" },
+  { id: "construction", label: "施工について" },
+  { id: "estimate", label: "見積のご依頼" },
+  { id: "maintenance", label: "建物設備メンテナンスについて" },
+  { id: "recruit", label: "採用について" },
+  { id: "other", label: "その他お問い合わせ" },
 ];
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
     name: "",
     company: "",
+    department: "",
     email: "",
     phone: "",
     inquiryType: "",
     message: "",
+    documentRequest: false,
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -31,7 +33,12 @@ export default function ContactPage() {
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value, type } = e.target;
+    if (type === "checkbox") {
+      setFormData({ ...formData, [name]: (e.target as HTMLInputElement).checked });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -47,7 +54,7 @@ export default function ContactPage() {
     <div>
       {/* Hero */}
       <section className="relative pt-32 pb-16 md:pt-40 md:pb-20 bg-primary-950">
-        <div className="absolute inset-0 bg-gradient-to-b from-primary-900 to-primary-950" />
+        <div className="absolute inset-0 bg-primary-950" />
         <div className="container-custom relative z-10">
           <nav className="flex items-center gap-2 text-sm text-slate-400 mb-6">
             <Link href="/" className="hover:text-white transition-colors">ホーム</Link>
@@ -170,39 +177,92 @@ export default function ContactPage() {
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
+                  {/* Inquiry Type */}
+                  <div>
+                    <label htmlFor="inquiryType" className="block text-sm font-medium text-slate-700 mb-2">
+                      お問い合わせ種別 <span className="text-red-500">*</span>
+                    </label>
+                    <select
+                      id="inquiryType"
+                      name="inquiryType"
+                      required
+                      value={formData.inquiryType}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 border border-slate-300 rounded-md focus:ring-2 focus:ring-accent-500 focus:border-accent-500 transition-colors"
+                    >
+                      <option value="">選択してください</option>
+                      {inquiryTypes.map((type) => (
+                        <option key={type.id} value={type.id}>{type.label}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Company & Department */}
                   <div className="grid md:grid-cols-2 gap-6">
                     <div>
-                      <label htmlFor="name" className="block text-sm font-medium text-slate-700 mb-2">
-                        お名前 <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        required
-                        value={formData.name}
-                        onChange={handleChange}
-                        className="w-full px-4 py-3 border border-slate-300 rounded-md focus:ring-2 focus:ring-accent-500 focus:border-accent-500 transition-colors"
-                        placeholder="山田 太郎"
-                      />
-                    </div>
-                    <div>
                       <label htmlFor="company" className="block text-sm font-medium text-slate-700 mb-2">
-                        会社名・団体名
+                        会社名 <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="text"
                         id="company"
                         name="company"
+                        required
                         value={formData.company}
                         onChange={handleChange}
                         className="w-full px-4 py-3 border border-slate-300 rounded-md focus:ring-2 focus:ring-accent-500 focus:border-accent-500 transition-colors"
                         placeholder="株式会社〇〇"
                       />
                     </div>
+                    <div>
+                      <label htmlFor="department" className="block text-sm font-medium text-slate-700 mb-2">
+                        部署名
+                      </label>
+                      <input
+                        type="text"
+                        id="department"
+                        name="department"
+                        value={formData.department}
+                        onChange={handleChange}
+                        className="w-full px-4 py-3 border border-slate-300 rounded-md focus:ring-2 focus:ring-accent-500 focus:border-accent-500 transition-colors"
+                        placeholder="営業部"
+                      />
+                    </div>
                   </div>
 
+                  {/* Name */}
+                  <div>
+                    <label htmlFor="name" className="block text-sm font-medium text-slate-700 mb-2">
+                      お名前 <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="name"
+                      name="name"
+                      required
+                      value={formData.name}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 border border-slate-300 rounded-md focus:ring-2 focus:ring-accent-500 focus:border-accent-500 transition-colors"
+                      placeholder="山田 太郎"
+                    />
+                  </div>
+
+                  {/* Contact Info */}
                   <div className="grid md:grid-cols-2 gap-6">
+                    <div>
+                      <label htmlFor="phone" className="block text-sm font-medium text-slate-700 mb-2">
+                        電話番号
+                      </label>
+                      <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleChange}
+                        className="w-full px-4 py-3 border border-slate-300 rounded-md focus:ring-2 focus:ring-accent-500 focus:border-accent-500 transition-colors"
+                        placeholder="075-000-0000"
+                      />
+                    </div>
                     <div>
                       <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-2">
                         メールアドレス <span className="text-red-500">*</span>
@@ -218,41 +278,9 @@ export default function ContactPage() {
                         placeholder="example@email.com"
                       />
                     </div>
-                    <div>
-                      <label htmlFor="phone" className="block text-sm font-medium text-slate-700 mb-2">
-                        電話番号
-                      </label>
-                      <input
-                        type="tel"
-                        id="phone"
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleChange}
-                        className="w-full px-4 py-3 border border-slate-300 rounded-md focus:ring-2 focus:ring-accent-500 focus:border-accent-500 transition-colors"
-                        placeholder="075-000-0000"
-                      />
-                    </div>
                   </div>
 
-                  <div>
-                    <label htmlFor="inquiryType" className="block text-sm font-medium text-slate-700 mb-2">
-                      お問い合わせ種別 <span className="text-red-500">*</span>
-                    </label>
-                    <select
-                      id="inquiryType"
-                      name="inquiryType"
-                      required
-                      value={formData.inquiryType}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 border border-slate-300 rounded-md focus:ring-2 focus:ring-accent-500 focus:border-accent-500 transition-colors"
-                    >
-                      <option value="">選択してください</option>
-                      {inquiryTypes.map((type) => (
-                        <option key={type} value={type}>{type}</option>
-                      ))}
-                    </select>
-                  </div>
-
+                  {/* Message */}
                   <div>
                     <label htmlFor="message" className="block text-sm font-medium text-slate-700 mb-2">
                       お問い合わせ内容 <span className="text-red-500">*</span>
@@ -269,6 +297,28 @@ export default function ContactPage() {
                     />
                   </div>
 
+                  {/* Document Request */}
+                  <div className="bg-accent-50 border border-accent-200 rounded-lg p-4">
+                    <label className="flex items-start gap-3 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        name="documentRequest"
+                        checked={formData.documentRequest}
+                        onChange={handleChange}
+                        className="mt-0.5 w-5 h-5 text-accent-600 border-slate-300 rounded focus:ring-accent-500"
+                      />
+                      <div>
+                        <span className="text-sm font-medium text-primary-900">
+                          資料請求を希望する
+                        </span>
+                        <p className="text-xs text-slate-600 mt-0.5">
+                          ラクユーZ工法の詳細資料（PDF）をメールでお送りします。
+                        </p>
+                      </div>
+                    </label>
+                  </div>
+
+                  {/* Privacy Notice */}
                   <div className="bg-slate-50 border border-slate-200 rounded-lg p-4">
                     <p className="text-sm text-slate-600">
                       ご入力いただいた個人情報は、お問い合わせへの回答およびご連絡のために利用いたします。
