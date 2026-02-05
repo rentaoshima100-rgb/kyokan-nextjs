@@ -67,9 +67,9 @@ export function HeroSection() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-display-lg md:text-display-xl font-bold text-white mb-5 leading-tight text-shadow-lg"
           >
-            維持管理時代の
+            RAKUYU-Z工法で、
             <br />
-            <span className="text-accent-300">水替え対策</span>
+            <span className="text-accent-300">断水のない水道工事を</span>
           </motion.h1>
 
           {/* Description */}
